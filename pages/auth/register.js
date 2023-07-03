@@ -1,8 +1,26 @@
 import React from "react";
 // layout for page
 import Auth from "layouts/Auth.js";
+import { SkillOverInput } from "components/base/input";
+import EmailInput from "components/base/email-input";
+import PasswordInput from "components/base/PasswordInput";
+import { Form } from "antd";
+import { Button } from "components/base/button";
+import { signUp } from "Service/request";
 
 export default function Register() {
+
+  const onFinish = (values) => {
+    console.log(values);
+    signUp(values).then((res)  => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -30,7 +48,13 @@ export default function Register() {
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <small>Or sign up with credentials</small>
                 </div>
-                <form>
+                <Form
+                name="basic"
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                id="form_group"
+              >
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -38,11 +62,12 @@ export default function Register() {
                     >
                       Name
                     </label>
-                    <input
+                    {/* <input
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Name"
-                    />
+                    /> */}
+                  <SkillOverInput name={'name'} placeholder={'Please enter your full name'} message={"kindly fill in your name"}/>              
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -52,14 +77,18 @@ export default function Register() {
                     >
                       Email
                     </label>
-                    <input
+                    {/* <input
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Email"
-                    />
+                    /> */}
+                    {/* <EmailInput name={'name'} placeholder={'Please enter your email address'} message={"kindly fill in a valid email address"}/> */}
+                    <EmailInput
+                    name={"email"}
+                    placeholder={"Your Email Address"} />
                   </div>
 
-                  <div className="relative w-full mb-3">
+                  {/* <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
@@ -72,7 +101,7 @@ export default function Register() {
                       <option value="volvo">Trainer</option>
                       <option value="saab">Employee</option>
                     </select>
-                  </div>
+                  </div> */}
 
                   <div className="relative w-full mb-3">
                     <label
@@ -81,11 +110,13 @@ export default function Register() {
                     >
                       Password
                     </label>
-                    <input
-                      type="password"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Password"
-                    />
+                    <PasswordInput name={'password'}   message={
+                      "Please input your Iklass password which must have a minimum of 6 characters containing at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
+                    }
+                    pattern={
+                      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+                    } 
+                    placeholder='Enter your password' />
                   </div>
 
                   <div>
@@ -107,16 +138,14 @@ export default function Register() {
                       </span>
                     </label>
                   </div>
-
                   <div className="text-center mt-6">
-                    <button
+                    <Button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
-                    >
-                      Create Account
-                    </button>
+                      
+                      text='Create Account'
+                    />
                   </div>
-                </form>
+                </Form>
               </div>
             </div>
           </div>
