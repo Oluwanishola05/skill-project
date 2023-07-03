@@ -4,6 +4,8 @@ import Link from "next/link";
 // layout for page
 
 import Auth from "layouts/Auth.js";
+import { Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 export default function Login() {
   return (
@@ -33,33 +35,39 @@ export default function Login() {
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <small>Or sign in with credentials</small>
                 </div>
-                <form>
+                <Form>
                   <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
-                    />
+                  <Form.Item
+                        name="username"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please input your Username!',
+                          },
+                        ]}
+                      >
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                      </Form.Item>
+                      
+                  
                   </div>
 
                   <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Password"
-                    />
+                     <Form.Item
+                          name="password"
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Please input your Password!',
+                            },
+                          ]}
+                        >
+                          <Input
+                            prefix={<LockOutlined className="site-form-item-icon" />}
+                            type="password"
+                            placeholder="Password"
+                          />
+                    </Form.Item>
                   </div>
                   <div>
                     <label className="inline-flex items-center cursor-pointer">
@@ -85,7 +93,7 @@ export default function Login() {
                       Sign In
                     </button>
                   </div>
-                </form>
+                </Form>
               </div>
             </div>
             <div className="flex flex-wrap mt-6 relative">
