@@ -1,25 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 // layout for page
 import Auth from "layouts/Auth.js";
 import { SkillOverInput } from "components/base/input";
 import EmailInput from "components/base/email-input";
 import PasswordInput from "components/base/PasswordInput";
-import { Form } from "antd";
+import { DatePicker, Form, notification } from "antd";
 import { Button } from "components/base/button";
 import { signUp } from "Service/request";
+import moment from "moment";
+import { SkillOverSelect } from "components/base/select";
+import AntdPhoneNumberInput from "components/base/phone_number_select";
+import { useRouter } from "next/router";
 
 export default function Register() {
+  const [dob, setDob] = useState("");
+  const router = useRouter();
+  const genders = [
+    {
+      name: "Male",
+      value: "male",
+    },
+    {
+      name: "Female",
+      value: "female",
+    },
+  ];
 
   const onFinish = (values) => {
     console.log(values);
-    signUp(values).then((res)  => {
-      console.log(res);
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
+    let signUpData = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      password: values.password,
+      dateOfBirth: values.dateOfBirth,
+      location: values.location,
+      gender: values.gender,
+      phoneNumber: values.phoneNumber,
+    };
+    signUp(signUpData)
+      .then((res) => {
+        console.log(res);
+        notification.success({
+          message: "Success",
+          description: `Congratulations ${res.data.data.firstName}!, you are welcome to Skill Over community!`,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        notification.error({
+          message: "Error",
+          description: err.response.data.message,
+        });
+      });
+  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+
+  const onChange = (date, dateString) => {
+    console.log(date, dateString);
+    setDob(dateString);
+
+    // return Math.abs(ageDate.getUTCFullYear() - 1970)
   };
   return (
     <>
@@ -49,74 +92,141 @@ export default function Register() {
                   <small>Or sign up with credentials</small>
                 </div>
                 <Form
-                name="basic"
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-                id="form_group"
-              >
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Name
-                    </label>
-                    {/* <input
-                      type="email"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Name"
-                    /> */}
-                  <SkillOverInput name={'name'} placeholder={'Please enter your full name'} message={"kindly fill in your name"}/>              
+                  name="basic"
+                  onFinish={onFinish}
+                  onFinishFailed={onFinishFailed}
+                  autoComplete="off"
+                  id="form_group"
+                >
+                  <div className="w-full flex flex-col lg:flex-row lg:gap-6">
+                    <div className="w-full">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        First Name
+                      </label>
+                      <SkillOverInput
+                        name={"firstName"}
+                        placeholder={"Please enter your full name"}
+                        message={"kindly fill in your name"}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Last Name
+                      </label>
+                      <SkillOverInput
+                        name={"lastName"}
+                        placeholder={"Please enter your full name"}
+                        message={"kindly fill in your name"}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full flex flex-col lg:flex-row lg:gap-6">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Email
+                      </label>
+
+                      <EmailInput
+                        name={"email"}
+                        placeholder={"Your Email Address"}
+                      />
+                    </div>
+                    <div className="w-full  ">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Phone Number
+                      </label>
+                      <AntdPhoneNumberInput name={"phoneNumber"} />
+                    </div>
                   </div>
 
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Email
-                    </label>
-                    {/* <input
-                      type="email"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
-                    /> */}
-                    {/* <EmailInput name={'name'} placeholder={'Please enter your email address'} message={"kindly fill in a valid email address"}/> */}
-                    <EmailInput
-                    name={"email"}
-                    placeholder={"Your Email Address"} />
+                  <div className={"w-full flex flex-col lg:flex-row lg:gap-6"}>
+                    <div className="flex w-full flex-col">
+                      <h1 className="text-base font-medium text-[#4B5667]">
+                        Gender:
+                      </h1>
+                      <SkillOverSelect
+                        name="gender"
+                        placeholder="Gender"
+                        className="w-full"
+                        options={genders}
+                      />
+                    </div>
+                    <div className="flex w-full flex-col ">
+                      <h1 className="text-base font-medium text-[#4B5667]">
+                        Date of Birth:
+                      </h1>
+                      <Form.Item
+                        name="dateOfBirth"
+                        className="w-full"
+                        rules={[
+                          {
+                            required: true,
+                            message: "This field is required",
+                          },
+                        ]}
+                        valuePropName={dob}
+                      >
+                        <DatePicker
+                          className={"skill-date-picker"}
+                          placeholder="Date of birth"
+                          disabledDate={
+                            (d) =>
+                              !d || d.isAfter(moment().subtract(18, "years"))
+                            // ||
+                            // d.isSameOrBefore('1960-01-01')
+                          }
+                          format="YYYY-MM-DD"
+                          // value={dob}
+                          // defaultPickerValue={moment().subtract(18, 'years')}
+                          onChange={onChange}
+                        />
+                      </Form.Item>
+                    </div>
                   </div>
-
-                  {/* <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Do you want to be a trainer or an employee?
-                    </label>
-                    <select name="user" id="user"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    >
-                      <option value="volvo">Trainer</option>
-                      <option value="saab">Employee</option>
-                    </select>
-                  </div> */}
-
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Password
-                    </label>
-                    <PasswordInput name={'password'}   message={
-                      "Please input your Iklass password which must have a minimum of 6 characters containing at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
-                    }
-                    pattern={
-                      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
-                    } 
-                    placeholder='Enter your password' />
+                  <div className="w-full flex flex-col lg:flex-row  lg:justify-between">
+                    <div className="w-full ">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Location
+                      </label>
+                      <SkillOverInput
+                        name={"location"}
+                        placeholder={"Please enter your location"}
+                        message={"kindly fill in your desired location"}
+                      />
+                    </div>
+                    <div className="w-full mb-3">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Password
+                      </label>
+                      <PasswordInput
+                        name={"password"}
+                        message={
+                          "Please input your Iklass password which must have a minimum of 6 characters containing at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
+                        }
+                        pattern={
+                          /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+                        }
+                        placeholder="Enter your password"
+                      />
+                    </div>
                   </div>
 
                   <div>
@@ -141,8 +251,7 @@ export default function Register() {
                   <div className="text-center mt-6">
                     <Button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      
-                      text='Create Account'
+                      text="Create Account"
                     />
                   </div>
                 </Form>

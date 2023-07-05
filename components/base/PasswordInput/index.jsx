@@ -5,7 +5,7 @@ const PasswordInput = ({ name, placeholder, message, pattern }) => {
   return (
     <Form.Item
       name={name}
-      className="w-full relative "
+      className="w-full lg:w-[200px]"
       rules={[
         {
           required: true,
@@ -20,7 +20,7 @@ const PasswordInput = ({ name, placeholder, message, pattern }) => {
     >
       <Input.Password
         placeholder={placeholder ?? "Password"}
-        className="password-input tw-px-[16px] tw-py-[5px] tw-h-[48px] tw-border tw-text-brand-gray-200   tw-focus:outline-none tw-border-gray-200 tw-outline:border-brand-200 tw-rounded-md tw-focus:border-brand-200 tw-placeholder:text-sm tw-placeholder:text-gray-600 tw-placeholder:font-normal"
+        className="password-input px-[16px] py-[5px] h-[100px] border text-brand-gray-200   focus:outline-none border-gray-200 outline:border-brand-200 rounded-md focus:border-brand-200 placeholder:text-sm placeholder:text-gray-600 placeholder:font-normal"
       />
     </Form.Item>
   );

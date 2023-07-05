@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Input, message } from "antd";
+import { Form, Input } from "antd";
 
 export const SkillOverInput = ({ name, placeholder, className, message }) => {
   return (
@@ -16,8 +16,7 @@ export const SkillOverInput = ({ name, placeholder, className, message }) => {
       <Input
         type={"text"}
         placeholder={placeholder}
-        className="tw-capitalize tw-text-sm tw-text-left tw-mb-1 tw-font-normal
-         tw-text-sm tw-text-left tw-mb-1 tw-font-normal tw-h-[49px]"
+        className="capitalize rounded-md w-full text-sm text-left border-0 font-normal"
       />
     </Form.Item>
   );
