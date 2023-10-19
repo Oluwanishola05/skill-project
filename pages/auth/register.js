@@ -1,20 +1,19 @@
 import React, { useState } from "react";
-// layout for page
 import Auth from "layouts/Auth.js";
 import { SkillOverInput } from "components/base/input";
 import EmailInput from "components/base/email-input";
 import PasswordInput from "components/base/PasswordInput";
 import { DatePicker, Form, notification } from "antd";
-import { Button } from "components/base/button";
 import { signUp } from "Service/request";
 import moment from "moment";
 import { SkillOverSelect } from "components/base/select";
 import AntdPhoneNumberInput from "components/base/phone_number_select";
-import { useRouter } from "next/router";
+import Router from "next/router";
+import Link from "next/link";
 
 export default function Register() {
   const [dob, setDob] = useState("");
-  const router = useRouter();
+
   const genders = [
     {
       name: "Male",
@@ -43,14 +42,17 @@ export default function Register() {
         console.log(res);
         notification.success({
           message: "Success",
-          description: `Congratulations ${res.data.data.firstName}!, you are welcome to Skill Over community!`,
+          description: `Congratulations ${res.data.firstName}!, you are welcome to Skill Over community!`,
         });
+
+        Router.push("/auth/login");
       })
+
       .catch((err) => {
         console.log(err);
         notification.error({
           message: "Error",
-          description: err.response.data.message,
+          description: err.message,
         });
       });
   };
@@ -72,19 +74,11 @@ export default function Register() {
             <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
               <div className="rounded-t mb-0 px-6 py-6">
                 <div className="text-center mb-3">
-                  <h6 className="text-blueGray-500 text-sm font-bold">
-                    Sign up with
+                  <h6 className="text-blueGray-500 text-xl font-bold">
+                    SIGN UP
                   </h6>
                 </div>
-                <div className="btn-wrapper text-center">
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img alt="..." className="w-5 mr-1" src="/img/google.svg" />
-                    Google
-                  </button>
-                </div>
+
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
@@ -99,7 +93,7 @@ export default function Register() {
                   id="form_group"
                 >
                   <div className="w-full flex flex-col lg:flex-row lg:gap-6">
-                    <div className="w-full">
+                    <div className="w-full mr-3">
                       <label
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
@@ -112,9 +106,9 @@ export default function Register() {
                         message={"kindly fill in your name"}
                       />
                     </div>
-                    <div className="w-full">
+                    <div className="w-full ml-3">
                       <label
-                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        className="block uppercase text-blueGray-600 text-xs  ml-10 font-bold mb-2"
                         htmlFor="grid-password"
                       >
                         Last Name
@@ -127,7 +121,7 @@ export default function Register() {
                     </div>
                   </div>
                   <div className="w-full flex flex-col lg:flex-row lg:gap-6">
-                    <div className="relative w-full mb-3">
+                    <div className="relative w-full mb-3 mr-3">
                       <label
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
@@ -140,7 +134,7 @@ export default function Register() {
                         placeholder={"Your Email Address"}
                       />
                     </div>
-                    <div className="w-full  ">
+                    <div className="w-full  ml-3">
                       <label
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
@@ -151,8 +145,8 @@ export default function Register() {
                     </div>
                   </div>
 
-                  <div className={"w-full flex flex-col lg:flex-row lg:gap-6"}>
-                    <div className="flex w-full flex-col">
+                  <div className={"w-full flex flex-col lg:flex-row lg:gap-6 "}>
+                    <div className="flex w-full flex-col mr-3">
                       <h1 className="text-base font-medium text-[#4B5667]">
                         Gender:
                       </h1>
@@ -163,7 +157,7 @@ export default function Register() {
                         options={genders}
                       />
                     </div>
-                    <div className="flex w-full flex-col ">
+                    <div className="flex w-full flex-col ml-3">
                       <h1 className="text-base font-medium text-[#4B5667]">
                         Date of Birth:
                       </h1>
@@ -196,7 +190,7 @@ export default function Register() {
                     </div>
                   </div>
                   <div className="w-full flex flex-col lg:flex-row  lg:justify-between">
-                    <div className="w-full ">
+                    <div className="w-full mr-3">
                       <label
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
@@ -209,7 +203,7 @@ export default function Register() {
                         message={"kindly fill in your desired location"}
                       />
                     </div>
-                    <div className="w-full mb-3">
+                    <div className="w-full mb-3 ml-3">
                       <label
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
@@ -249,12 +243,24 @@ export default function Register() {
                     </label>
                   </div>
                   <div className="text-center mt-6">
-                    <Button
+                    <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      text="Create Account"
-                    />
+                      submit="button"
+                    >
+                      Create Account
+                    </button>
                   </div>
                 </Form>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap mt-6 relative">
+              <div className="w-1/2 text-left">
+                <Link href="/auth/login">
+                  <a href="#pablo" className="text-blueGray-200">
+                    <small>Back To Login</small>
+                  </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -263,5 +269,4 @@ export default function Register() {
     </>
   );
 }
-
 Register.layout = Auth;
